@@ -1,6 +1,6 @@
 function main() {
   
-  // Global vars
+  // Globals
   var date = new Date()
   var currentDate = Utilities.formatDate(date, "EST", "yyyyMMdd")
   var cellDate = Utilities.formatDate(date, "EST", "MM/dd/yyyy")
@@ -14,7 +14,10 @@ function main() {
   
   // Gets campaign cost data 
   function getData() {
-    var campaignIterator = AdWordsApp.campaigns().withCondition(campaignCondition).get()
+    var campaignIterator = AdWordsApp
+      .campaigns()
+      .withCondition(campaignCondition)
+      .get()
     
     while (campaignIterator.hasNext()) {
       var campaign = campaignIterator.next()
