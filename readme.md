@@ -1,7 +1,7 @@
 # Google Scripts
 Some simple automations. A work in progress. Check out the [Google docs](https://developers.google.com/adwords/scripts/docs/your-first-script) for more info.
 
-### cost_stats.js
+## cost_stats.js
 A script that calculates how much you've spent on a Google AdWords campaign through the present day and enters that total into an existing Google spreadsheet along with the date updated.
 
 #### Getting Started
