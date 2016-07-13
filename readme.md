@@ -6,6 +6,7 @@ A script that calculates how much you've spent on a Google AdWords campaign thro
 
 #### Usage
 You'll want to have a [Google Sheet](https://docs.google.com/spreadsheets/) created before you use this.
+
 1. Log into your AdWords account.
 2. Navigate to a campaign.
 3. Select `bulk operations` >  `scripts`.
