@@ -1,43 +1,52 @@
-function main() {
+// Global vars
+var date = new Date()
+var currentDate = Utilities.formatDate(date, "EST", "yyyyMMdd")
+var cellDate = Utilities.formatDate(date, "EST", "MM/dd/yyyy")
+var campaignCondition = "Name='YOUR ADWORDS CAMPAIGN NAME HERE'"
+var spreadsheetUrl = "YOUR SPREADSHEET URL HERE"
+var sheetName = "YOUR SPREADSHEET URL HERE"
+var campaignKey
+var statArray = []
+
+// Copies everything to the spreadsheet
+function main() {  
+  getCampaignKey()
+  getCampaignStats(campaignKey, statArray)
+}
+
+// Main campaign data access point
+function getCampaignKey() {
+ var campaignIterator = AdWordsApp.campaigns().withCondition(campaignCondition).get()
+ 
+ while (campaignIterator.hasNext()) {
+   var campaign = campaignIterator.next()
+   var campaignStart = campaign.getStartDate()    // Gets the start date. Unlike the current date, this returns an object.
+   campaignKey = campaign.getStatsFor(campaignStart, currentDate) // Gets the full campaign date range.
+   }
+  return campaignKey
+}
+
+// Gets main campaign statistics
+function getCampaignStats(key, array) {
+  var stringArray = []
   
-  // Globals
-  var date = new Date()
-  var currentDate = Utilities.formatDate(date, "EST", "yyyyMMdd")
-  var cellDate = Utilities.formatDate(date, "EST", "MM/dd/yyyy")
-  var campaignCondition = "Name='ENTER YOUR CAMPAIGN NAME HERE'"    // Modify with your info.
-  
-  var spreadsheetUrl = "ENTER YOUR SPREADSHEET URL LINK HERE"   // Modify with your info.
-  var sheetName = "ENTER THE SPREADSHEET TAB NAME HERE"   // Modify with your info.
-  
-  // Invoked function to copy everything to the spreadsheet.
-  copyData()
-  
-  // Gets campaign cost data 
-  function getData() {
-    var campaignIterator = AdWordsApp
-      .campaigns()
-      .withCondition(campaignCondition)
-      .get()
-    
-    while (campaignIterator.hasNext()) {
-      var campaign = campaignIterator.next()
-      var campaignStart = campaign.getStartDate()    // Unlike the current date, this returns an object.
-      var costRange = campaign.getStatsFor(campaignStart, currentDate)
-      var cost = costRange.getCost()
-    }
-    return cost
-  }
-  
-  function copyData() {
-    var ss = SpreadsheetApp.openByUrl(spreadsheetUrl)
-    var sheet = ss.getSheetByName(sheetName)
-    
-    // Selects spreadsheet cells
-    var dateCell = sheet.getRange("ENTER CELL1 HERE (EX. A2) : ENTER CELL1 HERE")   // Modify with your info.
-    var costCell = sheet.getRange("ENTER CELL2 HERE (EX. B4) : ENTER CELL2 HERE")   // Modify with your info.
-    
-    // Sets cell values
-    dateCell.setValue(cellDate)
-    costCell.setValue(getData())    // References data returned in getData function.
-  } 
+  // AdWords horribly doesn't seem to let you convert array elements to string using a loop.
+  stringArray.push(
+    key.getImpressions().toString(),
+    key.getClicks().toString(),
+    key.getAverageCpc().toString(),
+    key.getCtr().toString(),
+    key.getCost().toString()
+    )
+
+  // Needs to be a two dimensional array for spreadsheet. 
+  array.push(stringArray)
+  copyStats(array)
+}
+
+function copyStats(values) {
+  var ss = SpreadsheetApp.openByUrl(spreadsheetUrl)
+  var sheet = ss.getSheetByName(sheetName)
+  var range = sheet.getRange("STARTING CELL (EX.A1): ENDING CELL (EX.E1)")
+  range.setValues(values) 
 }
