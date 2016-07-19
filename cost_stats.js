@@ -47,6 +47,10 @@ function getCampaignStats(key, array) {
 function copyStats(values) {
   var ss = SpreadsheetApp.openByUrl(spreadsheetUrl)
   var sheet = ss.getSheetByName(sheetName)
-  var range = sheet.getRange("STARTING CELL (EX.A1): ENDING CELL (EX.E1)")
-  range.setValues(values) 
+
+  var dateCell = sheet.getRange("DATE CELL (EX.A1): A1")
+  var rangeStats = sheet.getRange("STARTING CELL (EX.A1): ENDING CELL (EX.E1)")
+  
+  dateCell.setValue(cellDate)
+  rangeStats.setValues(values) 
 }
