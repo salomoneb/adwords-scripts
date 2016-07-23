@@ -4,7 +4,7 @@ var currentDate = Utilities.formatDate(date, "ET", "yyyyMMdd")
 var cellDate = Utilities.formatDate(date, "ET", "MM/dd/yyyy")
 var campaignCondition = "Name='YOUR ADWORDS CAMPAIGN NAME HERE'"
 var spreadsheetUrl = "YOUR SPREADSHEET URL HERE"
-var sheetName = "YOUR SPREADSHEET URL HERE"
+var sheetName = "YOUR SPREADSHEET NAME HERE"
 var campaignKey
 var statArray = []
 
@@ -38,17 +38,17 @@ function getCampaignStats(key, array) {
     key.getCost()
     )
   
-  var stringArray = intArray.map(String)    // Converts integers in array to strings    
+  var stringArray = intArray.map(String)    // Converts integers in array to strings.    
   array.push(stringArray)    // We do this because the spreadsheet requires a two-dimensional array.
-  copyStats(array)    // Invokes function to copy stats to spreadsheet
+  copyStats(array)    // Invokes function to copy stats to spreadsheet.
 }
 
 // Function that copies stats to spreadsheet
 function copyStats(values) {
   var ss = SpreadsheetApp.openByUrl(spreadsheetUrl)
   var sheet = ss.getSheetByName(sheetName)
-  var dateCell = sheet.getRange("DATE CELL (EX.A1): A1")
-  var rangeStats = sheet.getRange("STARTING CELL (EX.A1): ENDING CELL (EX.E1)")
+  var dateCell = sheet.getRange("DATE CELL (EX.A1): A1")    // Cell where you want the date to go.
+  var rangeStats = sheet.getRange("STARTING CELL (EX.A1): ENDING CELL (EX.E1)")    // Cells where you want the statistics to go.
   
   dateCell.setValue(cellDate)
   rangeStats.setValues(values) 
