@@ -1,6 +1,8 @@
-// Facebook access variables 
+// Facebook access variables.
 var token = "XXXX" // Enter your Facebook access token here. 
-var url = "https://graph.facebook.com/v2.8/act_10155507023415075" // Endpoint variable. 
+
+// Facebook endpoint.
+var url = "https://graph.facebook.com/v2.8/act_10155507023415075"
 + "?fields=campaigns%7Bname%2C%20status%2Cinsights.fields(date_start%2Cdate_stop%2Cclicks%2Cimpressions%2Cctr%2Ccpc%2Cspend).date_preset(this_quarter)%7D&access_token="
 + token
 
@@ -20,7 +22,7 @@ function mainFunc() {
   updateSheet()
 }
 
-// Get Facebook data
+// Get Facebook data.
 function callDataSource() {
  var response = UrlFetchApp.fetch(url)
  var parsedResponse = JSON.parse(response.getContentText())
@@ -29,7 +31,7 @@ function callDataSource() {
  return dataKey
 }
  
-// Reformat Facebook data for easier manipulation
+// Reformat Facebook data for easier manipulation.
 function reformatData(rawData) {
  for (var i = 0; i < rawData.length; i++) {
    
@@ -121,7 +123,7 @@ function checkBlanks() {
   }
 }
 
-// If sheet's empty, delete all the rows. Otherwise, just add. 
+// If sheet's empty, delete all the rows. Otherwise, just add new data. 
 function updateSheet() {
   prepData()
   if (checkBlanks() === true)  {
