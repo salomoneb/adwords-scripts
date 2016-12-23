@@ -41,6 +41,7 @@ function getStats() {
     ])
   }
   
+  // There has to be a better way to do this. 
   headers.push([
     "Date",
     report.getColumnHeader("CampaignName").getBulkUploadColumnName(),
