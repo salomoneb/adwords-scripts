@@ -1,9 +1,7 @@
-// Facebook access variables.
-var token = "XXXX" // Enter your Facebook access token here. 
-
-// Facebook endpoint.
-var url = "https://graph.facebook.com/v2.8/act_10155507023415075"
-+ "?fields=campaigns%7Bname%2C%20status%2Cinsights.fields(date_start%2Cdate_stop%2Cclicks%2Cimpressions%2Cctr%2Ccpc%2Cspend).date_preset(this_quarter)%7D&access_token="
+// Facebook access variables 
+var token = "XXXXX" // Enter your Facebook access token here. 
+var url = "https://graph.facebook.com/v2.8/act_10155507023415075" // Endpoint variable. 
++ "?fields=campaigns%7Bname%2C%20status%2Cinsights.fields(date_start%2Cdate_stop%2Cclicks%2Cimpressions%2Cctr%2Ccpc%2Cspend).date_preset(lifetime)%7D&access_token="
 + token
 
 // Reorganized raw Facebook data here.
@@ -15,14 +13,14 @@ var rows = rows || []
 
 // Google spreadsheet data.
 var activeSheet = SpreadsheetApp.getActiveSpreadsheet()
-var fbSheet = activeSheet.getSheetByName("XXXX") // Enter your spreadsheet's name. 
+var fbSheet = activeSheet.getSheetByName("XXXXX") // Enter your spreadsheet's name. 
 
 // Runs everything.
 function mainFunc() {
   updateSheet()
 }
 
-// Get Facebook data.
+// Get Facebook data
 function callDataSource() {
  var response = UrlFetchApp.fetch(url)
  var parsedResponse = JSON.parse(response.getContentText())
@@ -31,33 +29,39 @@ function callDataSource() {
  return dataKey
 }
  
-// Reformat Facebook data for easier manipulation.
+// Reformat Facebook data for easier manipulation
 function reformatData(rawData) {
  for (var i = 0; i < rawData.length; i++) {
    
-   // Sets the date to be yesterday so reports match data.
-   var date = new Date()
-   date.setDate(date.getDate() - 1)
+//   if (rawData[i].status === "ACTIVE") {
    
-   // Main data object.
-   var data = {
-     date: date,
-     name: rawData[i].name,
-     status: rawData[i].status
-   }
-   
-   // If insights exist, push them into object.
-   if (rawData[i].insights) {
-     var insightsKey = rawData[i].insights.data
-     for (var j = 0; j < insightsKey.length; j++) {
-       data.clicks = insightsKey[j].clicks
-       data.impressions = insightsKey[j].impressions
-       data.ctr = insightsKey[j].ctr
-       data.cpc = insightsKey[j].cpc
-       data.spend = insightsKey[j].spend
+     // Sets the date to be yesterday so reports match data.
+     var date = new Date()
+     date.setDate(date.getDate() - 1)
+     
+     // Main data object.
+     var data = {
+       date: date,
+       name: rawData[i].name,
+       status: rawData[i].status
      }
-   }
-   dataObj.push(data)
+     
+     // If insights exist, push them into object.
+     if (rawData[i].insights) {
+       var insightsKey = rawData[i].insights.data
+       for (var j = 0; j < insightsKey.length; j++) {
+         data.clicks = insightsKey[j].clicks
+         data.impressions = insightsKey[j].impressions
+         data.ctr = insightsKey[j].ctr
+         data.cpc = insightsKey[j].cpc
+         data.spend = insightsKey[j].spend
+       }
+     }
+     dataObj.push(data)
+//   }
+//   else {
+//     Logger.log("Ad not active")
+//   }
  }
 }
 
@@ -115,15 +119,13 @@ function checkBlanks() {
         Logger.log("First value in sheet: " + row[j])
         return false
       }
-      else {
-        Logger.log("No values in sheet")
-        return true
-      }
+      Logger.log("No values in sheet")
+      return true
     }                                         
   }
 }
 
-// If sheet's empty, delete all the rows. Otherwise, just add new data. 
+// If sheet's empty, delete all the rows. Otherwise, append the new rows. 
 function updateSheet() {
   prepData()
   if (checkBlanks() === true)  {
