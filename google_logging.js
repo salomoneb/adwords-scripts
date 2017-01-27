@@ -1,4 +1,4 @@
-var ss = SpreadsheetApp.openByUrl("XXXXX") // Enter your spreadsheet's URL
+var ss = SpreadsheetApp.openByUrl("XXXXX") // Enter your spreadsheet URL
 var googleSheet = ss.getSheetByName("XXXXX") // Enter your sheet name
 var headers
 var values
